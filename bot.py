@@ -3,7 +3,7 @@ from aarrr import password_generate
 from emodji import gen_emodji
 from telebot import types
 import time
-bot = telebot.TeleBot("7995941958:AAHlUlya8_7uzkhQ0gj8K53xND3Np0EwfTU")
+bot = telebot.TeleBot("TOKEN")
 
 
 
