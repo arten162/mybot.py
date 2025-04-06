@@ -2,7 +2,8 @@ import telebot
 from aarrr import password_generate
 from emodji import gen_emodji
 from telebot import types
-import time
+from memas3 import mem_gen
+import requests
 bot = telebot.TeleBot("TOKEN")
 
 
@@ -13,7 +14,9 @@ bot.set_my_commands(
     commands=[
         telebot.types.BotCommand("pass", "сгенерируй крутой пароль и напиши сколько цифр нужно"),
         telebot.types.BotCommand("emodji", "Супер мега смешное эмодзи класс"),
-        telebot.types.BotCommand("start", "Сообщение от гениального разработчика Артёма супер легенды")
+        telebot.types.BotCommand("start", "Сообщение от гениального разработчика Артёма супер легенды"),
+        telebot.types.BotCommand("memas", "Получи случайный мемчик с шансом!"),
+        telebot.types.BotCommand("dog", "Получши случайную картинку собачки!!")
     ],
     # scope=telebot.types.BotCommandScopeChat(12345678)  # use for personal command for users
     # scope=telebot.types.BotCommandScopeAllPrivateChats()  # use for all private chats
@@ -32,12 +35,29 @@ def send_emodji(message):
     emodji = gen_emodji()
     bot.reply_to(message, f"Лови эмоджи': {emodji}")
 
+@bot.message_handler(commands=['memas'])
+def send_memas(message):
+ with open(f'p/{mem_gen()}', 'rb') as f:
+    bot.send_photo(message.chat.id, f)
+
 @bot.message_handler(commands=['pass'])
 def send_password(message):
     pass_length = message.text
     pass_length = int (pass_length.split()[1])
     passwordsuper = password_generate(int(pass_length))
     bot.reply_to(message, passwordsuper)
+
+def get_dog_image_url():
+        url = 'https://random.dog/woof.json'
+        res = requests.get(url)
+        data = res.json()
+        return data['url']
+
+
+@bot.message_handler(commands=['dog'])
+def dog(message):
+    image_url = get_dog_image_url()
+    bot.reply_to(message, image_url)
 
 
 
